@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Stock Dividend History</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="input-section">
+            <input type="text" id="stockSymbol" placeholder="Enter stock symbol (e.g., ITC)">
+            <button onclick="fetchData()">Fetch Dividend History</button>
+        </div>
+        <div id="error-message"></div>
+        <div class="chart-container" style="position: relative; height:70vh; width:80vw">
+            <canvas id="dividendChart"></canvas>
+        </div>
+    </div>
+
+    <script>
+        let chart = null;
+
+        async function fetchData() {
+            const symbol = document.getElementById('stockSymbol').value.toUpperCase();
+            const errorElement = document.getElementById('error-message');
+            
+            if (!symbol) {
+                errorElement.textContent = 'Please enter a stock symbol';
+                return;
+            }
+
+            try {
+                errorElement.textContent = '';
+                const response = await fetch(`http://localhost:8000/api/stock/${symbol}/dividends`);
+                const data = await response.json();
+
+                if (!data.yearly_dividends) {
+                    throw new Error('No dividend data available');
+                }
+
+                // Reverse data for chronological display
+                const reversedData = [...data.yearly_dividends].reverse();
+                
+                // Calculate growth percentages
+                const growthRates = [];
+                for (let i = 1; i < reversedData.length; i++) {
+                    const current = reversedData[i].total_dividend;
+                    const previous = reversedData[i-1].total_dividend;
+                    const growth = previous !== 0 
+                        ? ((current - previous) / previous) * 100 
+                        : 0;
+                    growthRates.push(growth);
+                }
+
+                const ctx = document.getElementById('dividendChart').getContext('2d');
+                const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+                gradient.addColorStop(0, 'rgba(75, 192, 192, 0.4)');
+                gradient.addColorStop(1, 'rgba(75, 192, 192, 0.1)');
+
+                if (chart) {
+                    chart.destroy();
+                }
+
+                Chart.register(ChartDataLabels);
+
+                chart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: reversedData.map(item => item.year),
+                        datasets: [{
+                            label: 'Total Dividends',
+                            data: reversedData.map(item => item.total_dividend),
+                            backgroundColor: gradient,
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 2,
+                            borderRadius: 5,
+                            hoverBackgroundColor: 'rgba(75, 192, 192, 0.8)',
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: `${data.company} - Dividend History with YoY Growth`,
+                                font: { size: 20, weight: 'bold' },
+                                padding: 20
+                            },
+                            tooltip: {
+                                enabled: true,
+                                backgroundColor: 'rgba(0,0,0,0.8)',
+                                bodyFont: { size: 14 },
+                                callbacks: {
+                                    title: (items) => `Year: ${items[0].label}`,
+                                    label: (context) => {
+                                        const value = context.parsed.y;
+                                        let label = `Dividend: ₹${value.toFixed(2)}`;
+                                        
+                                        if (context.dataIndex > 0) {
+                                            const growth = growthRates[context.dataIndex - 1];
+                                            const trend = growth >= 0 ? '▲' : '▼';
+                                            label += `\nGrowth: ${trend} ${Math.abs(growth).toFixed(1)}%`;
+                                        }
+                                        return label;
+                                    }
+                                }
+                            },
+                            datalabels: {
+                                anchor: 'end',
+                                align: (context) => context.dataIndex === 0 ? 'end' : 'start',
+                                color: (context) => {
+                                    if (context.dataIndex === 0) return '#666';
+                                    const growth = growthRates[context.dataIndex - 1];
+                                    return growth >= 0 ? '#2ecc71' : '#e74c3c';
+                                },
+                                font: { size: 12, weight: 'bold' },
+                                formatter: (value, context) => {
+                                    if (context.dataIndex === 0) return `₹${value.toFixed(2)}`;
+                                    
+                                    const growth = growthRates[context.dataIndex - 1];
+                                    const trend = growth >= 0 ? '↑' : '↓';
+                                    return `${trend} ${Math.abs(growth).toFixed(1)}%`;
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Dividend Amount (INR)',
+                                    font: { size: 14 }
+                                },
+                                grid: { color: 'rgba(0,0,0,0.1)' },
+                                ticks: {
+                                    callback: (value) => `₹${value}`,
+                                    stepSize: 20,
+                                    font: { size: 12 }
+                                }
+                            },
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Financial Year',
+                                    font: { size: 14 }
+                                },
+                                grid: { display: false },
+                                ticks: { 
+                                    font: { size: 12 },
+                                    autoSkip: false
+                                }
+                            }
+                        },
+                        animation: {
+                            duration: 1000,
+                            easing: 'easeOutQuart'
+                        },
+                        layout: {
+                            padding: { top: 20, bottom: 30 }
+                        }
+                    }
+                });
+
+            } catch (error) {
+                errorElement.textContent = `Error: ${error.message}`;
+            }
+        }
+    </script>
+</body>
+</html>
