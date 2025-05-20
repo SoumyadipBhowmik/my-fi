@@ -1,0 +1,79 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres_secure_password
+      POSTGRES_DB: myfi_database
+      PGDATA: /var/lib/postgresql/data
+    volumes:
+      - myfi_postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    command: postgres -c 'max_connections=200'
+    networks:
+      - myfi
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - myfi_redis_data:/data
+    networks:
+      - myfi
+    command: redis-server --requirepass redis_secure_password
+    restart: unless-stopped
+
+  sonarqube:
+    image: sonarqube:latest
+    container_name: sonarqube
+    ports:
+      - "9000:9000"
+    environment:
+      - SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true
+    volumes:
+      - myfi_sonarqube_data:/opt/sonarqube/data
+      - myfi_sonarqube_extensions:/opt/sonarqube/extensions
+      - myfi_sonarqube_logs:/opt/sonarqube/logs
+    networks:
+      - myfi
+    restart: unless-stopped
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    container_name: keycloak
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: keycloak_secure_password
+    ports:
+      - "8180:8080"
+    command:
+      - start-dev
+    networks:
+      - myfi
+    restart: unless-stopped
+
+volumes:
+  myfi_postgres_data:
+    name: myfi_postgres_data
+  myfi_redis_data:
+    name: myfi_redis_data
+  myfi_sonarqube_data:
+    name: myfi_sonarqube_data
+  myfi_sonarqube_extensions:
+    name: myfi_sonarqube_extensions
+  myfi_sonarqube_logs:
+    name: myfi_sonarqube_logs
+
+networks:
+  myfi:
+    name: myfi
