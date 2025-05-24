@@ -30,7 +30,9 @@ extra["springGrpcVersion"] = "0.8.0"
 
 dependencies {
     implementation("io.grpc:grpc-services")
-    implementation("org.springframework.grpc:spring-grpc-spring-boot-starter")
+//    implementation("org.springframework.grpc:spring-grpc-spring-boot-starter")
+    // https://mvnrepository.com/artifact/net.devh/grpc-server-spring-boot-starter
+    implementation("net.devh:grpc-server-spring-boot-starter:3.1.0.RELEASE")
     compileOnly("org.projectlombok:lombok")
     runtimeOnly("org.postgresql:postgresql")
     annotationProcessor("org.projectlombok:lombok")

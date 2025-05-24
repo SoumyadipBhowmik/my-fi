@@ -1,4 +1,4 @@
-package com.myfi;
+package com.myfi.portfolio;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

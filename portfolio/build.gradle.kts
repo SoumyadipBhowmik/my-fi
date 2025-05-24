@@ -31,6 +31,7 @@ extra["springGrpcVersion"] = "0.8.0"
 dependencies {
     implementation("io.grpc:grpc-services")
     implementation("org.springframework.grpc:spring-grpc-spring-boot-starter")
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     compileOnly("org.projectlombok:lombok")
     runtimeOnly("org.postgresql:postgresql")
     annotationProcessor("org.projectlombok:lombok")

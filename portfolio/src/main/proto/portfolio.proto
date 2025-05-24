@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package my_fi;
+
+option java_multiple_files = true;
+option java_package = "com.myfi.portfolio";
+option java_outer_classname = "MyFiProto";
+
+
+service PortfolioService {
+    rpc ShowNetworth(GetNetworthRequest) returns (GetNetworthReturn);
+}
+
+message GetNetworthRequest {
+    string user_id = 1;
+}
+
+message GetNetworthReturn {
+    double total_networth = 1;
+    string as_of = 2;
+    int32 percentage_growth = 3;
+    double percentage_invested = 4;
+    double percentage_emergency = 5;
+    double percentage_expense = 6;
+    double travel_fund = 7;
+}
