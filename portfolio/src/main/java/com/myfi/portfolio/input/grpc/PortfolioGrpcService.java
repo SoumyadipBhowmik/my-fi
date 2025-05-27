@@ -5,9 +5,11 @@ import com.myfi.portfolio.GetNetworthReturn;
 import com.myfi.portfolio.PortfolioServiceGrpc;
 import com.myfi.portfolio.service.PortfolioApplicationService;
 import io.grpc.stub.StreamObserver;
-import org.springframework.stereotype.Service;
+import lombok.AllArgsConstructor;
+import net.devh.boot.grpc.server.service.GrpcService;
 
-@Service
+@GrpcService
+@AllArgsConstructor
 public class PortfolioGrpcService extends PortfolioServiceGrpc.PortfolioServiceImplBase {
 
     PortfolioApplicationService portfolioService;

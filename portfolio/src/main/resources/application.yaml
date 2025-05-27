@@ -1,8 +1,13 @@
 grpc:
   server:
-    port: 1010
+    port: 9091
+    reflection-service-enabled: true
+    security:
+      enabled: false
 
 spring:
+  main:
+    web-application-type: none
   jpa:
     hibernate:
       ddl-auto: update
@@ -12,3 +17,21 @@ spring:
     password: ${POSTGRES_PASSWORD:postgres_secure_password}
     driver-class-name: org.postgresql.Driver
     platform: postgres
+
+logging:
+  service:
+    name: portfolio
+  level:
+    root: ${LOG_LEVEL:INFO}
+    org.hibernate.engine.jdbc.spi.SqlExceptionHelper: ERROR
+    org.springframework.dao: ERROR
+    org.apache.catalina.core.ContainerBase: ERROR
+    com.snappyerp.system: ${LOG_LEVEL:INFO}
+    org.springframework: ${LOG_LEVEL:INFO}
+    org.hibernate.SQL: ${LOG_LEVEL:INFO}
+    org.hibernate.type.descriptor.sql.BasicBinder: ${LOG_LEVEL:INFO}
+    org.hibernate.type: ${LOG_LEVEL:INFO}
+    org.hibernate.stat: ${LOG_LEVEL:INFO}
+    org.hibernate.engine.transaction.internal.TransactionImpl: ${LOG_LEVEL:INFO}
+    com.zaxxer.hikari: ${LOG_LEVEL:INFO}
+    com.zaxxer.hikari.HikariConfig: ${LOG_LEVEL:INFO}

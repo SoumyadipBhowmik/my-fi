@@ -1,10 +1,17 @@
 package com.myfi.portfolio.config;
-
+import java.util.concurrent.Executors;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.grpc.server.configure.GrpcServerConfigurer;
+import net.devh.boot.grpc.server.serverfactory.GrpcServerConfigurer;
 
 @Configuration
 public class GrpcServerConfiguration {
 
-    public GrpcServerConfigurer
+    @Bean
+    public GrpcServerConfigurer serverConfigurer() {
+        return serverBuilder -> {
+            serverBuilder.executor(Executors.newVirtualThreadPerTaskExecutor());
+            serverBuilder.intercept(new GlobalExceptionHandler());
+        };
+    }
 }

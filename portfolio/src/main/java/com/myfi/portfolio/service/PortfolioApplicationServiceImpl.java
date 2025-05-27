@@ -2,11 +2,27 @@ package com.myfi.portfolio.service;
 
 import com.myfi.portfolio.GetNetworthRequest;
 import com.myfi.portfolio.GetNetworthReturn;
+import com.myfi.portfolio.persistence.entities.PortfolioJpaEntity;
+import com.myfi.portfolio.persistence.jpa_repositories.PortfolioJpaRepository;
+import org.springframework.stereotype.Service;
 
+import java.util.UUID;
 
+@Service
 public class PortfolioApplicationServiceImpl implements PortfolioApplicationService {
+
+    PortfolioJpaRepository portfolioJpaRepository;
+
+    public PortfolioApplicationServiceImpl(PortfolioJpaRepository portfolioJpaRepository){
+        this.portfolioJpaRepository = portfolioJpaRepository;
+    }
+
     @Override
     public GetNetworthReturn showNetworth(GetNetworthRequest request) {
+
+        UUID userId = UUID.fromString(request.getUserId());
+
+        PortfolioJpaEntity portfolio = portfolioJpaRepository.findByUserId(userId);
 
         return GetNetworthReturn.newBuilder()
                 .setTotalNetworth(100.00)
@@ -15,7 +31,7 @@ public class PortfolioApplicationServiceImpl implements PortfolioApplicationServ
                 .setPercentageInvested(100)
                 .setPercentageEmergency(20)
                 .setPercentageExpense(100)
-                .setTravelFund(5000).
-                build();
+                .setTravelFund(5000)
+                .build();
     }
 }

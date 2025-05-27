@@ -1,9 +1,42 @@
-//package com.myfi.portfolio.persistence.entities;
-//
-//
-//import jakarta.persistence.Entity;
-//
-//@Entity
-//public class PortfolioJpaEntity {
-//
-//}
+package com.myfi.portfolio.persistence.entities;
+
+
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.UUID;
+
+@Getter
+@Setter
+@ToString
+@Entity
+@Table(name = "portfolio")
+public class PortfolioJpaEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
+
+    private UUID userId;
+
+    private double extraCash;
+
+    private double salary;
+
+    private double investment;
+
+    private double expense;
+
+    private double bankBalance;
+
+    private LocalDate transactionData;
+
+    private LocalDateTime createdAt;
+
+    private LocalDateTime updatedAt;
+
+}
