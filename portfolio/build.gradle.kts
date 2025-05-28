@@ -10,6 +10,8 @@ repositories {
     mavenCentral()
 }
 
+
+
 val grpcSpringVersion = "3.1.0.RELEASE"
 val grpcJavaVersion = "1.58.0"
 val javaxAnnotationVersion = "1.3.2"
@@ -62,6 +64,7 @@ dependencies {
 
     // ========== Testing ==========
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+    implementation(project(":common"))
 }
 
 protobuf {

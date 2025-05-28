@@ -4,6 +4,7 @@ import com.myfi.portfolio.GetNetworthRequest;
 import com.myfi.portfolio.GetNetworthReturn;
 import com.myfi.portfolio.PortfolioServiceGrpc;
 import com.myfi.portfolio.service.PortfolioApplicationService;
+
 import io.grpc.stub.StreamObserver;
 import lombok.AllArgsConstructor;
 import net.devh.boot.grpc.server.service.GrpcService;
@@ -12,12 +13,13 @@ import net.devh.boot.grpc.server.service.GrpcService;
 @AllArgsConstructor
 public class PortfolioGrpcService extends PortfolioServiceGrpc.PortfolioServiceImplBase {
 
-    PortfolioApplicationService portfolioService;
+  PortfolioApplicationService portfolioService;
 
-    @Override
-    public void showNetworth(GetNetworthRequest request, StreamObserver<GetNetworthReturn> responseObserver) {
-        GetNetworthReturn response = portfolioService.showNetworth(request);
-        responseObserver.onNext(response);
-        responseObserver.onCompleted();
-    }
+  @Override
+  public void showNetworth(
+      GetNetworthRequest request, StreamObserver<GetNetworthReturn> responseObserver) {
+    GetNetworthReturn response = portfolioService.showNetworth(request);
+    responseObserver.onNext(response);
+    responseObserver.onCompleted();
+  }
 }

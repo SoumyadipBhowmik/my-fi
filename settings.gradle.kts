@@ -5,3 +5,5 @@ plugins {
 
 rootProject.name = "my-fi"
 include("portfolio")
+include("common")
+include("common")

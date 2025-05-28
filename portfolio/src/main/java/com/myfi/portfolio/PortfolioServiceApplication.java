@@ -7,7 +7,7 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 @SpringBootApplication
 @EnableAspectJAutoProxy
 public class PortfolioServiceApplication {
-    public static void main(String[] args) {
-        SpringApplication.run(PortfolioServiceApplication.class, args);
-    }
+  public static void main(String[] args) {
+    SpringApplication.run(PortfolioServiceApplication.class, args);
+  }
 }

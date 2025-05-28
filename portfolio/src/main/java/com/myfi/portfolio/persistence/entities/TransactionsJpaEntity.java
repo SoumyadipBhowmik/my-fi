@@ -4,17 +4,17 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import com.myfi.portfolio.domain.enums.TransactionType;
+
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 @Getter
 @Setter
-@ToString
 @Entity
-@Table(name = "portfolio")
-public class PortfolioJpaEntity {
+@Table(name = "transactions")
+public class TransactionsJpaEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
@@ -22,17 +22,13 @@ public class PortfolioJpaEntity {
 
   private UUID userId;
 
-  private double extraCash;
+  private TransactionType transactionType;
 
-  private double salary;
+  private UUID categoryId;
 
-  private double investment;
+  private double amount;
 
-  private double expense;
-
-  private double bankBalance;
-
-  private LocalDate transactionData;
+  private LocalDate transactionDate;
 
   private LocalDateTime createdAt;
 
