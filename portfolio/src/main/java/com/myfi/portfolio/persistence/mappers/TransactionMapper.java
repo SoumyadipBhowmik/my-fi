@@ -15,9 +15,6 @@ public class TransactionMapper {
   }
 
   public Transactions toDomain(TransactionsJpaEntity entity) {
-    if (entity == null) {
-      return null;
-    }
     Transactions transactions = new Transactions();
     transactions.setUserId(entity.getUserId());
     transactions.setType(entity.getTransactionType());

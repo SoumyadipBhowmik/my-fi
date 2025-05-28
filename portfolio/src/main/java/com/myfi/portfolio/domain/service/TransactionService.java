@@ -19,7 +19,7 @@ public class TransactionService {
     this.transactionsRepository = transactionsRepository;
   }
 
-  Transactions createTransaction(CreateTransactionCommand command) {
+  public Transactions createTransaction(CreateTransactionCommand command) {
     if (command.getType() == null) {
       throw new InvalidArgumentException("Need Transaction type");
     }
@@ -27,7 +27,7 @@ public class TransactionService {
     return transactionsRepository.save(transactions);
   }
 
-  void updateTransaction(UpdateTransactionCommand command) {
+  public void updateTransaction(UpdateTransactionCommand command) {
     UUID transactionId = command.getId();
 
     Transactions transactions =

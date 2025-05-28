@@ -4,6 +4,10 @@ import java.util.UUID;
 
 import com.myfi.portfolio.CreateTransactionRequest;
 import com.myfi.portfolio.TransactionResponse;
+import com.myfi.portfolio.domain.models.Transactions;
+import com.myfi.portfolio.domain.service.TransactionService;
+import com.myfi.portfolio.persistence.entities.TransactionsJpaEntity;
+import com.myfi.portfolio.persistence.mappers.TransactionMapper;
 import org.springframework.stereotype.Service;
 
 import com.myfi.portfolio.GetNetworthRequest;
@@ -14,15 +18,22 @@ import com.myfi.portfolio.persistence.jpa_repositories.PortfolioJpaRepository;
 @Service
 public class PortfolioApplicationServiceImpl implements PortfolioApplicationService {
 
-  PortfolioJpaRepository portfolioJpaRepository;
+  private final PortfolioJpaRepository portfolioJpaRepository;
+  private final TransactionService transactionService;
+  private final TransactionMapper transactionMapper;
 
-  public PortfolioApplicationServiceImpl(PortfolioJpaRepository portfolioJpaRepository) {
+  public PortfolioApplicationServiceImpl(PortfolioJpaRepository portfolioJpaRepository, TransactionService transactionService, TransactionMapper transactionMapper) {
     this.portfolioJpaRepository = portfolioJpaRepository;
+    this.transactionService = transactionService;
+    this.transactionMapper = transactionMapper;
   }
 
   @Override
   public TransactionResponse createTransaction(CreateTransactionRequest request) {
+
+    TransactionsJpaEntity entity = new TransactionsJpaEntity();
     return null;
+//    Transactions transactions = transactionService.createTransaction(transactionMapper.toDomain(entity));
   }
 
   @Override
