@@ -1,10 +1,9 @@
-import com.google.protobuf.gradle.id
-
 plugins {
 	java
 	id("org.springframework.boot") version "3.4.5"
 	id("io.spring.dependency-management") version "1.1.7"
-	id("com.google.protobuf") version "0.9.4"
+	id("com.diffplug.spotless") version "6.25.0" apply false
+	id("org.sonarqube") version "4.4.1.3373"
 }
 
 group = "com.myfi"
@@ -16,56 +15,59 @@ java {
 	}
 }
 
-configurations {
-	compileOnly {
-		extendsFrom(configurations.annotationProcessor.get())
+subprojects {
+	repositories {
+		mavenCentral()
+	}
+	apply(plugin = "com.diffplug.spotless")
+
+	configure<com.diffplug.gradle.spotless.SpotlessExtension> {
+		java {
+			target("src/*/java/**/*.java")
+			googleJavaFormat()
+			removeUnusedImports()
+			importOrder(
+				"java",
+				"javax",
+				"org.springframework",
+				"org",
+				"com",
+				""
+			)
+			endWithNewline()
+			trimTrailingWhitespace()
+		}
+	}
+
+	tasks.withType<com.diffplug.gradle.spotless.SpotlessCheck>().configureEach {
+		doFirst {
+			println("\nChecking ${project.name}...")
+			println("Import Order Checks...")
+			println("Format Style Checks...")
+			println("Line Ending Checks...")
+		}
+
+		doLast {
+			if (state.failure == null) {
+				println("${project.name}: No formatting issues found")
+			}
+		}
+	}
+
+	tasks.withType<com.diffplug.gradle.spotless.SpotlessApply>().configureEach {
+		doFirst {
+			println("\nFormatting ${project.name}...")
+			println("Fixing imports...")
+			println("Applying format styles...")
+			println("Fixing line endings...")
+		}
+
+		doLast {
+			println("${project.name}: Formatting applied")
+		}
 	}
 }
 
 repositories {
 	mavenCentral()
-}
-
-extra["springGrpcVersion"] = "0.8.0"
-
-dependencies {
-	implementation("io.grpc:grpc-services")
-	implementation("org.springframework.grpc:spring-grpc-spring-boot-starter")
-	compileOnly("org.projectlombok:lombok")
-	runtimeOnly("org.postgresql:postgresql")
-	annotationProcessor("org.projectlombok:lombok")
-	testImplementation("org.springframework.boot:spring-boot-starter-test")
-	testImplementation("org.springframework.grpc:spring-grpc-test")
-	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-}
-
-dependencyManagement {
-	imports {
-		mavenBom("org.springframework.grpc:spring-grpc-dependencies:${property("springGrpcVersion")}")
-	}
-}
-
-protobuf {
-	protoc {
-		artifact = "com.google.protobuf:protoc"
-	}
-	plugins {
-		id("grpc") {
-			artifact = "io.grpc:protoc-gen-grpc-java"
-		}
-	}
-	generateProtoTasks {
-		all().forEach {
-			it.plugins {
-				id("grpc") {
-					option("jakarta_omit")
-					option("@generated=omit")
-				}
-			}
-		}
-	}
-}
-
-tasks.withType<Test> {
-	useJUnitPlatform()
 }
