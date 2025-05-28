@@ -2,6 +2,8 @@ package com.myfi.portfolio.service;
 
 import java.util.UUID;
 
+import com.myfi.portfolio.CreateTransactionRequest;
+import com.myfi.portfolio.TransactionResponse;
 import org.springframework.stereotype.Service;
 
 import com.myfi.portfolio.GetNetworthRequest;
@@ -16,6 +18,11 @@ public class PortfolioApplicationServiceImpl implements PortfolioApplicationServ
 
   public PortfolioApplicationServiceImpl(PortfolioJpaRepository portfolioJpaRepository) {
     this.portfolioJpaRepository = portfolioJpaRepository;
+  }
+
+  @Override
+  public TransactionResponse createTransaction(CreateTransactionRequest request) {
+    return null;
   }
 
   @Override

@@ -16,22 +16,22 @@ public class Transactions extends AggregateRoot<UUID> {
 
   private UUID userId;
   private TransactionType type;
-  private UUID category;
+  private UUID categoryId;
   private double amount;
 
   public Transactions() {}
 
-  public Transactions(UUID userId, TransactionType type, UUID category, double amount) {
+  public Transactions(UUID userId, TransactionType type, UUID categoryId, double amount) {
     this.userId = userId;
     this.type = type;
-    this.category = category;
+    this.categoryId = categoryId;
     this.amount = amount;
   }
 
   public Transactions(CreateTransactionCommand command) {
     this.userId = command.getUserId();
     this.type = command.getType();
-    this.category = command.getCategory();
+    this.categoryId = command.getCategory();
     this.amount = command.getAmount();
   }
 
@@ -41,7 +41,7 @@ public class Transactions extends AggregateRoot<UUID> {
 
     if (command.getType() != null) this.type = command.getType();
 
-    if (command.getCategory() != null) this.category = command.getCategory();
+    if (command.getCategory() != null) this.categoryId = command.getCategory();
 
     if (command.getAmount() < 0) this.amount = command.getAmount();
   }

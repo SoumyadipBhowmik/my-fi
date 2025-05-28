@@ -8,7 +8,31 @@ option java_outer_classname = "MyFiProto";
 
 
 service PortfolioService {
+    rpc CreateTransaction(CreateTransactionRequest) returns (TransactionResponse);
     rpc ShowNetworth(GetNetworthRequest) returns (GetNetworthReturn);
+}
+
+enum TransactionType {
+    INVESTMENT = 0;
+    EXPENSE = 1;
+    TRAVEL_FUND = 2;
+}
+
+message CreateTransactionRequest {
+    string user_id = 1;
+    TransactionType type = 2;
+    string category_id = 3;
+    double amount = 4;
+    string transaction_date = 5;
+}
+
+message TransactionResponse {
+    string id = 1;
+    string user_id = 2;
+    TransactionType type = 3;
+    string category_id = 4;
+    double amount = 5;
+    string transaction_date = 6;
 }
 
 message GetNetworthRequest {

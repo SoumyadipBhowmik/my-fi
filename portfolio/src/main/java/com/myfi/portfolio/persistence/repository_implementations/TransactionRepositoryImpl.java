@@ -3,11 +3,11 @@ package com.myfi.portfolio.persistence.repository_implementations;
 import java.util.Optional;
 import java.util.UUID;
 
-import com.myfi.portfolio.persistence.entities.TransactionsJpaEntity;
 import org.springframework.stereotype.Repository;
 
 import com.myfi.portfolio.domain.models.Transactions;
 import com.myfi.portfolio.domain.repository.TransactionsRepository;
+import com.myfi.portfolio.persistence.entities.TransactionsJpaEntity;
 import com.myfi.portfolio.persistence.jpa_repositories.TransactionJpaRepository;
 import com.myfi.portfolio.persistence.mappers.TransactionMapper;
 
