@@ -14,7 +14,8 @@ public class PortfolioGrpcService extends PortfolioServiceGrpc.PortfolioServiceI
   PortfolioApplicationService portfolioService;
 
   @Override
-  public void createTransaction(CreateTransactionRequest request, StreamObserver<TransactionResponse> responseObserver) {
+  public void createTransaction(
+      CreateTransactionRequest request, StreamObserver<TransactionResponse> responseObserver) {
     TransactionResponse response = portfolioService.createTransaction(request);
     responseObserver.onNext(response);
     responseObserver.onCompleted();
