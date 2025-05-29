@@ -7,5 +7,6 @@ import com.myfi.portfolio.TransactionResponse;
 
 public interface PortfolioApplicationService {
   TransactionResponse createTransaction(CreateTransactionRequest request);
+
   GetNetworthReturn showNetworth(GetNetworthRequest request);
 }

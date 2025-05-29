@@ -40,11 +40,14 @@ message GetNetworthRequest {
 }
 
 message GetNetworthReturn {
-    double total_networth = 1;
-    string as_of = 2;
-    int32 percentage_growth = 3;
-    double percentage_invested = 4;
-    double percentage_emergency = 5;
-    double percentage_expense = 6;
-    double travel_fund = 7;
+    string as_of = 1;
+    double total_networth = 2;
+    double emergency_fund = 3;
+    double total_investment = 4;
+    double total_expense = 5;
+    double average_investment = 6;
+    double average_expense = 7;
+    int32 percentage_invested = 8;
+    int32 percentage_expense = 9;
+    double travel_fund = 10;
 }
